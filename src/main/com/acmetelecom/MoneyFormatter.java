@@ -7,8 +7,8 @@ class MoneyFormatter {
     public static String penceToPounds(BigDecimal pence) {
         BigDecimal pounds = pence.divide(new BigDecimal(100));
 
-        // Note that we need to specify the "English" locale here because some
+        // Note that we need to specify the "UK" locale here because some
         // other languages use ',' as the decimal separator.
-        return String.format(Locale.ENGLISH, "%.2f", pounds.doubleValue());
+        return String.format(Locale.UK, "%.2f", pounds.doubleValue());
     }
 }
