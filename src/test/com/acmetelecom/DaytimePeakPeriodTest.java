@@ -16,19 +16,19 @@ public class DaytimePeakPeriodTest {
         final Calendar time = new GregorianCalendar();
 
         // 5h15 am.
-        time.set(2013, 11, 13, 5, 15, 00);
+        time.set(2013, Calendar.NOVEMBER, 13, 5, 15, 0);
         assertTrue(period.offPeak(time.getTime()));
 
         // 7h00 am. (peak start hour)
-        time.set(2013, 11, 13, peakStartHour, 0, 0);
+        time.set(2013, Calendar.NOVEMBER, 13, peakStartHour, 0, 0);
         assertFalse(period.offPeak(time.getTime()));
 
         // 12h00 am.
-        time.set(2013, 11, 13, 12, 00, 00);
+        time.set(2013, Calendar.NOVEMBER, 13, 12, 0, 0);
         assertFalse(period.offPeak(time.getTime()));
 
         // 19h00 am. (peak end hour)
-        time.set(2013, 11, 13, peakEndHour, 00, 00);
+        time.set(2013, Calendar.NOVEMBER, 13, peakEndHour, 0, 0);
         assertTrue(period.offPeak(time.getTime()));
     }
 }
