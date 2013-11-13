@@ -1,10 +1,10 @@
 Feature: Basic Billing
 
 Background:
-    Given the following products:
+    Given the following tariffs:
         |Name 	| Unit Price |
-        |Milk 	| 0.50       |
-        |Cheese | 1.00       |
+        |OffPeak 0.50       |
+        |Peak    | 1.00       |
         |Bread 	| 0.75       |
 
 
