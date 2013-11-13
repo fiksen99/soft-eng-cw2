@@ -1,12 +1,9 @@
 package com.acmetelecom;
 
-import javax.swing.text.DateFormatter;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class Call {
     private CallEvent start;
@@ -26,7 +23,10 @@ public class Call {
     }
 
     public String date() {
-        return SimpleDateFormat.getInstance().format(new Date(start.time()));
+        // Need to specify UK locale here to ensure date gets formatted the same way across all systems.
+        final DateFormat formatter = SimpleDateFormat.getDateTimeInstance(
+                SimpleDateFormat.SHORT, SimpleDateFormat.SHORT, Locale.UK);
+        return formatter.format(new Date(start.time()));
     }
 
     public Date startTime() {
