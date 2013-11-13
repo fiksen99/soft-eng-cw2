@@ -4,6 +4,17 @@
 	<classpathentry kind="src" path="src/test"/>
 	<classpathentry kind="src" path="lib"/>
 	<classpathentry kind="lib" path="lib/external.jar"/>
+	<classpathentry kind="lib" path="lib/cucumber-jvm/cucumber-core-1.1.4-sources.jar"/>
+	<classpathentry kind="lib" path="lib/cucumber-jvm/cucumber-core-1.1.4.jar"/>
+	<classpathentry kind="lib" path="lib/cucumber-jvm/cucumber-html-0.2.3-sources.jar"/>
+	<classpathentry kind="lib" path="lib/cucumber-jvm/cucumber-html-0.2.3.jar"/>
+	<classpathentry kind="lib" path="lib/cucumber-jvm/cucumber-java-1.1.4-sources.jar"/>
+	<classpathentry kind="lib" path="lib/cucumber-jvm/cucumber-java-1.1.4.jar"/>
+	<classpathentry kind="lib" path="lib/cucumber-jvm/cucumber-junit-1.1.4-sources.jar"/>
+	<classpathentry kind="lib" path="lib/cucumber-jvm/cucumber-junit-1.1.4.jar"/>
+	<classpathentry kind="lib" path="lib/cucumber-jvm/cucumber-jvm-deps-1.0.3.jar"/>
+	<classpathentry kind="lib" path="lib/cucumber-jvm/gherkin-2.12.1.jar"/>
+	<classpathentry kind="lib" path="lib/cucumber-jvm/jchronic-0.2.6.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
