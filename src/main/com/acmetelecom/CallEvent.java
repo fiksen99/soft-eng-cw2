@@ -23,6 +23,8 @@ public abstract class CallEvent {
         return time;
     }
 
+    abstract CallEvent copy();
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

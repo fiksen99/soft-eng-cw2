@@ -8,4 +8,9 @@ public class CallEnd extends CallEvent {
     CallEnd(final String caller, final String callee, final long timestamp) {
         super(caller, callee, timestamp);
     }
+
+    @Override
+    CallEvent copy() {
+        return new CallEnd(getCaller(), getCallee(), time());
+    }
 }
