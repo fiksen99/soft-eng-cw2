@@ -11,15 +11,17 @@ public class BillingSystem {
     private final List<CallEvent> callLog;
     private final CustomerDatabase customerDb;
     private final TariffLibrary tariffLib;
+    private final BillGenerator billGenerator;
 
     public BillingSystem() {
-        this(CentralCustomerDatabase.getInstance(), CentralTariffDatabase.getInstance());
+        this(CentralCustomerDatabase.getInstance(), CentralTariffDatabase.getInstance(), new BillGenerator());
     }
 
-    public BillingSystem(CustomerDatabase db, TariffLibrary lib) {
+    public BillingSystem(CustomerDatabase db, TariffLibrary lib, BillGenerator billGenerator) {
         callLog = new ArrayList<CallEvent>();
         customerDb = db;
         tariffLib = lib;
+        this.billGenerator = billGenerator;
     }
 
     public void callInitiated(String caller, String callee) {
@@ -85,7 +87,7 @@ public class BillingSystem {
             items.add(new LineItem(call, callCost));
         }
 
-        new BillGenerator().send(customer, items, MoneyFormatter.penceToPounds(totalBill));
+        billGenerator.send(customer, items, MoneyFormatter.penceToPounds(totalBill));
     }
 
     static class LineItem {
