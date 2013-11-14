@@ -3,9 +3,8 @@ Feature: Billing
 Background:
     Given the following customer database:
         |   FullName  | PhoneNumber | PricePlan |
-        | Alan        |     001     |   Basic   |
-        | Steve       |     002     |   Basic   |
-        
+        | Alan        |     001     | Standard  |
+        | Steve       |     002     | Standard  |
 
 Scenario: Offpeak-Offpeak
     When 001 calls 002 at 10/26/2013, 03:15

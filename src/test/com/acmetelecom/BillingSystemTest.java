@@ -55,7 +55,7 @@ public class BillingSystemTest {
         doReturn(Tariff.Standard).when(mockTariffLib).tarriffFor(customerJohn);
         doReturn(Tariff.Business).when(mockTariffLib).tarriffFor(customerHelen);
 
-        billingSystem = new BillingSystem(mockDb, mockTariffLib);
+        billingSystem = new BillingSystem(mockDb, mockTariffLib, new BillGeneratorMockFactory());
     }
 
     /**
