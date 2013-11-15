@@ -6,6 +6,11 @@ import java.util.List;
 
 public class BillGenerator {
 
+    @Deprecated
+    public BillGenerator() {
+
+    }
+
     public void send(Customer customer, List<BillingSystem.LineItem> calls, String totalBill) {
 
         Printer printer = HtmlPrinter.getInstance();
