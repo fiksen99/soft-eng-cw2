@@ -1,0 +1,6 @@
+step 1: download and install maven
+step 2: move to top level directory of project (this dir)
+step 3: run `mvn install'
+step 4: run `mvn eclipse:eclipse'
+step 5: run `mvn -Declipse.workspace="my eclipse workspace (with quotes)" eclipse:configure-workspace'
+step 6: run eclipse, choose import existing project, navigate to this dir and click open
