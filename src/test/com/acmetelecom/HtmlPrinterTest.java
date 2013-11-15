@@ -12,9 +12,6 @@ import java.io.StringWriter;
 
 import static org.junit.Assert.*;
 
-/**
- * @author jp2310
- */
 public class HtmlPrinterTest {
     private ByteArrayOutputStream tempOut;
     private PrintStream oldOut;

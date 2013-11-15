@@ -3,9 +3,6 @@ package com.acmetelecom;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-/**
- * @author jp2310
- */
 public class CallEventTest {
     private static final String CALLER = "1234";
     private static final String CALLEE = "5678";
