@@ -24,6 +24,8 @@ public class BillGeneratorTest {
     @Test
     public void test() throws Exception {
         BillGenerator billGen = BillGeneratorMockFactory.getInstance().createBillGenerator();
+        String john = "John Smith";
+        String helen = "Helen Mirren";
 
         // Set up dummy parameters:
         Customer customer = new Customer("John Smith", "1234", "expensivePlan");
@@ -33,16 +35,16 @@ public class BillGeneratorTest {
         // Populate items:
         items.add(new BillingSystem.LineItem(
                     new Call(
-                            new CallStart("John Smith", "Hellen Mirren"),
-                            new CallEnd("John Smith", "Helen Mirren")
+                            new CallStart(john, helen),
+                            new CallEnd(john, helen)
                     ),
                     new BigDecimal(100)
                    ));
 
         items.add(new BillingSystem.LineItem(
                 new Call(
-                        new CallStart("Helen Mirren", "John Smith"),
-                        new CallEnd("Helen Mirren", "John Smith")
+                        new CallStart(helen, john),
+                        new CallEnd(helen, john)
                 ),
                 new BigDecimal(100)
         ));
@@ -67,13 +69,15 @@ public class BillGeneratorTest {
 
     @After
     public final void tearDown() {
-        // Put things back
+        // Put the old System.out back in place
         System.out.flush();
         System.setOut(oldOut);
     }
 
     /**
-     * Parses HTML in System.out and checks for errors
+     * Parses HTML in System.out and checks for errors, but ignores warnings since
+     * the existing implementation spreads opening and closing HTML tags over different
+     * methods.
      * @throws Exception
      */
     private void checkHTML() throws Exception {

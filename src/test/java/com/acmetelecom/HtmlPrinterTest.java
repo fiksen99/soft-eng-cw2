@@ -66,13 +66,15 @@ public class HtmlPrinterTest {
 
     @After
     public final void tearDown() {
-        // Put things back
+        // Put the old System.out back in place
         System.out.flush();
         System.setOut(oldOut);
     }
 
     /**
-     * Parses HTML in System.out and checks for errors
+     * Parses HTML in System.out and checks for errors, but ignores warnings since
+     * the existing implementation spreads opening and closing HTML tags over different
+     * methods.
      * @throws Exception
      */
     private void checkHTML() throws Exception {
