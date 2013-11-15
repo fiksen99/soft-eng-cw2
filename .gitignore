@@ -9,6 +9,7 @@ bin/*
 *.exe
 *.o
 *.so
+target/*
 
 # Packages #
 ############
