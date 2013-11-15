@@ -1,6 +1,7 @@
 package com.acmetelecom;
 
 import com.acmetelecom.customer.Customer;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,7 +23,7 @@ public class BillGeneratorTest {
 
     @Test
     public void test() throws Exception {
-        BillGenerator billGen = new BillGenerator();
+        BillGenerator billGen = BillGeneratorMockFactory.getInstance().createBillGenerator();
 
         // Set up dummy parameters:
         Customer customer = new Customer("John Smith", "1234", "expensivePlan");

@@ -39,7 +39,7 @@ public class BillingSystem {
     public void callCompleted(String caller, String callee, long time) {
         callLog.add(new CallEnd(caller, callee, time));
     }
-    
+
     public void createCustomerBills() {
         List<Customer> customers = customerDb.getCustomers();
         for (Customer customer : customers) {
@@ -97,7 +97,7 @@ public class BillingSystem {
 
         this.billGeneratorFact.createBillGenerator().send(customer, items, MoneyFormatter.penceToPounds(totalBill));
     }
-    
+
 
     static class LineItem {
         private Call call;

@@ -34,43 +34,43 @@ public class CucumberSteps {
     private final int peakStartHour = 7;
     private final int peakEndHour = 19;
     private final DaytimePeakPeriod period = new DaytimePeakPeriod(peakStartHour, peakEndHour);
-    private final BillingSystem billingSystem = new BillingSystem(customersDb, tariffsDb, new BillGeneratorMockFactory());
+    private final BillingSystem billingSystem = new BillingSystem(customersDb, tariffsDb, BillGeneratorMockFactory.getInstance());
 
 
     @Given("the following customer database")
     public void setUpCustomerDatabaseForTest(DataTable customersTable) {
     	List<Customer> customers = new ArrayList<Customer>();
-        
+
     	for (Map<String, String> row : customersTable.asMaps()) {
         		String phoneNumber = row.get("PhoneNumber");
         		String pricePlan = row.get("PricePlan");
         		Customer customer = new Customer(row.get("FullName"), phoneNumber, pricePlan);
         		customers.add(customer);
-        		
+
             	Mockito.when(tariffsDb.tarriffFor(Mockito.argThat(new PlanMatcher(customer)))).thenReturn(Tariff.valueOf(pricePlan));
         }
-       
+
         Mockito.stub(customersDb.getCustomers()).toReturn(customers);
     }
-    
+
     private class PlanMatcher extends ArgumentMatcher<Customer> {
     	private Customer expectedCustomer;
-    	
+
 		public PlanMatcher(Customer expectedCustomer) {
 			this.expectedCustomer = expectedCustomer;
 		}
-    	
+
     	@Override
 		public boolean matches(Object obj) {
     		if (expectedCustomer == obj) return true;
             if (!(obj instanceof Customer)) return false;
-     
+
             Customer givenCustomer = (Customer) obj;
-     
+
             if (givenCustomer.getPricePlan() != null
                     ? !givenCustomer.getPricePlan().equals(expectedCustomer.getPricePlan())
                     : expectedCustomer.getPricePlan() != null) return false;
-     
+
             return true;  //To change body of implemented methods use File | Settings | File Templates.
 		}
     }
@@ -85,15 +85,15 @@ public class CucumberSteps {
     public void endCall(String caller, String callee, @Format("dd-MM-yyyy, HH:mm") Date date) {
         billingSystem.callCompleted(caller, callee, date.getTime());
     }
-    
+
     @Then(value = "")
     public void createBills() {
-    	
+
     }
-    
+
     @Then("total\\s+(\\d+(?:\\.\\d+)?)")
     public void checkTotal(BigDecimal expectedTotal) {
-    	
+
     }
 
 }
