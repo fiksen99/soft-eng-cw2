@@ -21,8 +21,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Mockito;
 
@@ -34,10 +37,11 @@ public class CucumberSteps {
     private final int peakStartHour = 7;
     private final int peakEndHour = 19;
     private final DaytimePeakPeriod period = new DaytimePeakPeriod(peakStartHour, peakEndHour);
-    private final BillingSystem billingSystem = new BillingSystem(customersDb, tariffsDb, BillGeneratorMockFactory.getInstance());
+    private final BillingSystem billingSystem = new BillingSystem(customersDb, tariffsDb, new BillGeneratorMockFactory());
 
+    private static final Locale LOCALE = Locale.UK;
 
-    @Given("the following customer database")
+    @Given("the following customer database:")
     public void setUpCustomerDatabaseForTest(DataTable customersTable) {
     	List<Customer> customers = new ArrayList<Customer>();
 
@@ -75,25 +79,58 @@ public class CucumberSteps {
 		}
     }
 
+	@When("^(.+) calls (.+) at \"([^\"]*)\"$")
+    public void startCall(String caller, String callee, String date) {
+		DateTime time = DateTime.parse(date, DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss"));
+    	billingSystem.callInitiated(caller, callee, time.getMillis());
 
-	@When("\\s calls \\s at \"(.*)\"")
-    public void startCall(String caller, String callee, @Format("dd-MM-yyyy, HH:mm") Date date) {
-    	billingSystem.callInitiated(caller, callee, date.getTime());
+    	System.out.println("startCall: " + time.dayOfMonth().get() + ", " + time.getHourOfDay());
     }
 
-    @And("\\d+ ends call with \\d+ at \"(.*)\"")
-    public void endCall(String caller, String callee, @Format("dd-MM-yyyy, HH:mm") Date date) {
-        billingSystem.callCompleted(caller, callee, date.getTime());
+    @And("^(.+) ends call with (.+) at \"(.*)\"$")
+    public void endCall(String caller, String callee, String date) {
+    	DateTime time = DateTime.parse(date, DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss"));
+        billingSystem.callCompleted(caller, callee, time.getMillis());
     }
 
-    @Then(value = "")
-    public void createBills() {
+    @Then("the bill for (.+) with number (.+) and plan (.+) shows:")
+    public void createBills(String name, String number, String plan, DataTable expectedLines) {
+    	System.out.println("name " + name + " number " + number + " plan " + plan);
+    	Customer customer = new Customer(name, number, plan);
 
+        List<LineItem> actualLines = new ArrayList<LineItem>();
+        List<BillingSystem.LineItem> items = billingSystem.createBillFor(customer).getSnd();
+
+        System.out.println("called createBillFor");
+        System.out.println("size: " + items.size());
+
+        for (BillingSystem.LineItem line: items) {
+            actualLines.add(new LineItem(line));
+            System.out.println(line.callee() + " " + line.date() + " " + line.durationMinutes() + " " + line.cost());
+        }
+
+
+        expectedLines.diff(actualLines);
     }
 
-    @Then("total\\s+(\\d+(?:\\.\\d+)?)")
+    @Then("total (\\d+(?:\\.\\d+)?)")
     public void checkTotal(BigDecimal expectedTotal) {
-
+    	Customer customer = new Customer("", "", "");	//TODO
+    	BigDecimal actualTotal = billingSystem.createBillFor(customer).getFst();
+        assertEquals("bill total", expectedTotal, actualTotal);
     }
 
+    public static class LineItem {
+    	public String time;
+    	public String number;
+        public String duration;
+        public BigDecimal cost;
+
+        public LineItem(BillingSystem.LineItem line) {
+            time = line.date();
+            number = line.callee();
+            duration = line.durationMinutes();
+            cost = line.cost();
+        }
+    }
 }

@@ -1,10 +1,13 @@
 package com.acmetelecom;
 
 import com.acmetelecom.customer.*;
+import com.acmetelecom.util.Tuple;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
+
+import org.joda.time.DateTime;
 
 public class BillingSystem {
 
@@ -52,31 +55,11 @@ public class BillingSystem {
         return callLog.get(callLog.size()-1).copy();
     }
 
-    private void createBillFor(Customer customer) {
-        List<CallEvent> customerEvents = new ArrayList<CallEvent>();
-        for (CallEvent callEvent : callLog) {
-            if (callEvent.getCaller().equals(customer.getPhoneNumber())) {
-                customerEvents.add(callEvent);
-            }
-        }
+    private Tuple<BigDecimal, List<LineItem>> getBill(Customer customer, List<Call> calls){
+    	BigDecimal totalBill = new BigDecimal(0);
+    	List<LineItem> items = new ArrayList<LineItem>();
 
-        List<Call> calls = new ArrayList<Call>();
-
-        CallEvent start = null;
-        for (CallEvent event : customerEvents) {
-            if (event instanceof CallStart) {
-                start = event;
-            }
-            if (event instanceof CallEnd && start != null) {
-                calls.add(new Call(start, event));
-                start = null;
-            }
-        }
-
-        BigDecimal totalBill = new BigDecimal(0);
-        List<LineItem> items = new ArrayList<LineItem>();
-
-        for (Call call : calls) {
+    	for (Call call : calls) {
 
             Tariff tariff = tariffLib.tarriffFor(customer);
 
@@ -92,10 +75,42 @@ public class BillingSystem {
             cost = cost.setScale(0, RoundingMode.HALF_UP);
             BigDecimal callCost = cost;
             totalBill = totalBill.add(callCost);
+            System.out.println("in BillingSystem.getBill: callee=" + call.callee() + ", date=" + call.date() + ", startTime=" + call.startTime());
             items.add(new LineItem(call, callCost));
         }
 
-        this.billGeneratorFact.createBillGenerator().send(customer, items, MoneyFormatter.penceToPounds(totalBill));
+    	return new Tuple<BigDecimal, List<LineItem>>(totalBill, items);
+    }
+
+    Tuple<BigDecimal, List<LineItem>> createBillFor(Customer customer) {
+    	List<CallEvent> customerEvents = new ArrayList<CallEvent>();
+        for (CallEvent callEvent : callLog) {
+            if (callEvent.getCaller().equals(customer.getPhoneNumber())) {
+                customerEvents.add(callEvent);
+            }
+        }
+
+        List<Call> calls = new ArrayList<Call>();
+        CallEvent start = null;
+
+        for (CallEvent event : customerEvents) {
+            if (event instanceof CallStart) {
+            	System.out.println("Timestamp in BillingSystem.createBillFor: " + event.time());
+            	System.out.println("Event started at " + new DateTime(event.time()).toString("dd/MM/yyyy HH:mm:ss"));
+                start = event;
+            }
+            if (event instanceof CallEnd && start != null) {
+            	System.out.println("Event ended at " + new DateTime(event.time()).toString("dd/MM/yyyy HH:mm:ss"));
+
+                calls.add(new Call(start, event));
+                start = null;
+            }
+        }
+
+    	Tuple<BigDecimal, List<LineItem>> bill = getBill(customer, calls);
+        this.billGeneratorFact.createBillGenerator().send(customer, bill.getSnd(), MoneyFormatter.penceToPounds(bill.getFst()));
+
+        return bill;
     }
 
 
