@@ -1,27 +1,10 @@
 package com.acmetelecom;
 
-import cucumber.api.DataTable;
-import cucumber.api.Format;
-import cucumber.api.java.en.And;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
-
-import com.acmetelecom.Call;
-import com.acmetelecom.DaytimePeakPeriod;
-import com.acmetelecom.BillingSystem;
-import com.acmetelecom.customer.Customer;
-import com.acmetelecom.customer.CustomerDatabase;
-import com.acmetelecom.customer.Tariff;
-import com.acmetelecom.customer.CentralTariffDatabase;
-import com.acmetelecom.customer.TariffLibrary;
-import com.acmetelecom.util.LineItem;
+import static org.junit.Assert.assertEquals;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -31,7 +14,17 @@ import org.joda.time.format.DateTimeFormat;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Mockito;
 
-import static org.junit.Assert.assertEquals;
+import com.acmetelecom.customer.Customer;
+import com.acmetelecom.customer.CustomerDatabase;
+import com.acmetelecom.customer.Tariff;
+import com.acmetelecom.customer.TariffLibrary;
+import com.acmetelecom.util.LineItem;
+
+import cucumber.api.DataTable;
+import cucumber.api.java.en.And;
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 
 public class CucumberSteps {
     private final CustomerDatabase customersDb = Mockito.mock(CustomerDatabase.class);
