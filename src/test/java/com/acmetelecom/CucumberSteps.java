@@ -18,6 +18,7 @@ import com.acmetelecom.customer.TariffLibrary;
 import com.acmetelecom.util.LineItem;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -82,7 +83,7 @@ public class CucumberSteps {
 
 	@When("^(.+) calls (.+) at \"([^\"]*)\"$")
     public void startCall(String caller, String callee, String date) {
-		DateTime time = DateTime.parse(date, DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss"));
+		DateTime time = DateTime.parse(date, DateTimeFormat.forPattern("dd/MM/yy HH:mm:ss"));
     	billingSystem.callInitiated(caller, callee, time.getMillis());
 
     	System.out.println("startCall: " + time.dayOfMonth().get() + ", " + time.getHourOfDay());
@@ -90,7 +91,7 @@ public class CucumberSteps {
 
     @And("^(.+) ends call with (.+) at \"(.*)\"$")
     public void endCall(String caller, String callee, String date) {
-    	DateTime time = DateTime.parse(date, DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss"));
+    	DateTime time = DateTime.parse(date, DateTimeFormat.forPattern("dd/MM/yy HH:mm:ss"));
         billingSystem.callCompleted(caller, callee, time.getMillis());
     }
 
@@ -116,7 +117,8 @@ public class CucumberSteps {
 
     @Then("total (\\d+(?:\\.\\d+)?)")
     public void checkTotal(BigDecimal expectedTotal) {
-    	Customer customer = new Customer("", "", "");	//TODO
+        expectedTotal = expectedTotal.setScale(0, RoundingMode.HALF_UP);
+    	Customer customer = new Customer("Alan", "001", "Standard");	//TODO
     	BigDecimal actualTotal = billingSystem.createBillFor(customer).getFst();
         assertEquals("bill total", expectedTotal, actualTotal);
     }

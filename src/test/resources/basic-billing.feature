@@ -13,7 +13,7 @@ Scenario: Offpeak-Offpeak
     Then the bill for Alan with number 001 and plan Standard shows:
         |     Time        | Number      | Duration  |   Cost    |
         | 26/10/13 03:15  | 002         | 24:00     |   288     |
-    And total 0.24
+    And total 288
 
 Scenario: Peak-Peak
     When 001 calls 002 at "25/10/13 15:00:00"
@@ -22,7 +22,7 @@ Scenario: Peak-Peak
     Then the bill for Alan with number 001 and plan Standard shows:
         |     Time        | Number      | Duration  |   Cost    |
         |25/10/13 15:00   | 002         | 194:00    | 5,820     |
-    And total 3.88
+    And total 5820
 
 Scenario: Peak-Offpeak
     When 001 calls 002 at "25/10/13 15:00:00"
@@ -31,7 +31,7 @@ Scenario: Peak-Offpeak
     Then the bill for Alan with number 001 and plan Standard shows:
         |     Time        | Number      | Duration  |   Cost    |
         |25/10/13 15:00   | 002         | 254:00    | 7,620     |
-    And total 4.94
+    And total 7620
 
 Scenario: Offpeak-Peak
     When 001 calls 002 at "25/10/13 05:00:00"
@@ -40,7 +40,7 @@ Scenario: Offpeak-Peak
     Then the bill for Alan with number 001 and plan Standard shows:
         |     Time        | Number      | Duration  |   Cost    |
         |25/10/13 05:00   | 002         | 254:00    | 7,620     |
-    And total 4.02
+    And total 7620
 
 Scenario: Peak-Offpeak-Peak
     When 001 calls 002 at "25/10/13 18:00:00"
