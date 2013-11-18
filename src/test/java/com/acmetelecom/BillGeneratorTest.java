@@ -1,6 +1,7 @@
 package com.acmetelecom;
 
 import com.acmetelecom.customer.Customer;
+import com.acmetelecom.util.LineItem;
 
 import org.junit.After;
 import org.junit.Before;
@@ -30,10 +31,10 @@ public class BillGeneratorTest {
         // Set up dummy parameters:
         Customer customer = new Customer("John Smith", "1234", "expensivePlan");
         String totalBill = "totalBill";
-        List<BillingSystem.LineItem> items = new LinkedList<BillingSystem.LineItem>();
+        List<LineItem> items = new LinkedList<LineItem>();
 
         // Populate items:
-        items.add(new BillingSystem.LineItem(
+        items.add(new LineItem(
                     new Call(
                             new CallStart(john, helen),
                             new CallEnd(john, helen)
@@ -41,7 +42,7 @@ public class BillGeneratorTest {
                     new BigDecimal(100)
                    ));
 
-        items.add(new BillingSystem.LineItem(
+        items.add(new LineItem(
                 new Call(
                         new CallStart(helen, john),
                         new CallEnd(helen, john)

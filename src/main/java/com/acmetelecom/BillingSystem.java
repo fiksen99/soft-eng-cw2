@@ -1,6 +1,7 @@
 package com.acmetelecom;
 
 import com.acmetelecom.customer.*;
+import com.acmetelecom.util.LineItem;
 import com.acmetelecom.util.Tuple;
 
 import java.math.BigDecimal;
@@ -55,6 +56,11 @@ public class BillingSystem {
         return callLog.get(callLog.size()-1).copy();
     }
 
+    private BigDecimal calculateCost(long durationSeconds, BigDecimal rate) {
+    	BigDecimal cost = new BigDecimal(durationSeconds).multiply(rate);
+    	return cost.setScale(0, RoundingMode.HALF_UP);
+    }	
+    
     private Tuple<BigDecimal, List<LineItem>> getBill(Customer customer, List<Call> calls){
     	BigDecimal totalBill = new BigDecimal(0);
     	List<LineItem> items = new ArrayList<LineItem>();
@@ -62,19 +68,17 @@ public class BillingSystem {
     	for (Call call : calls) {
 
             Tariff tariff = tariffLib.tarriffFor(customer);
-
-            BigDecimal cost;
-
+            BigDecimal callCost;
             DaytimePeakPeriod peakPeriod = new DaytimePeakPeriod();
+
             if (peakPeriod.offPeak(call.startTime()) && peakPeriod.offPeak(call.endTime()) && call.durationSeconds() < 12 * 60 * 60) {
-                cost = new BigDecimal(call.durationSeconds()).multiply(tariff.offPeakRate());
+            	callCost = calculateCost(call.durationSeconds(), tariff.offPeakRate());
             } else {
-                cost = new BigDecimal(call.durationSeconds()).multiply(tariff.peakRate());
+            	callCost = calculateCost(call.durationSeconds(), tariff.peakRate());
             }
 
-            cost = cost.setScale(0, RoundingMode.HALF_UP);
-            BigDecimal callCost = cost;
             totalBill = totalBill.add(callCost);
+            
             System.out.println("in BillingSystem.getBill: callee=" + call.callee() + ", date=" + call.date() + ", startTime=" + call.startTime());
             items.add(new LineItem(call, callCost));
         }
@@ -111,32 +115,5 @@ public class BillingSystem {
         this.billGeneratorFact.createBillGenerator().send(customer, bill.getSnd(), MoneyFormatter.penceToPounds(bill.getFst()));
 
         return bill;
-    }
-
-
-    static class LineItem {
-        private Call call;
-        private BigDecimal callCost;
-
-        public LineItem(Call call, BigDecimal callCost) {
-            this.call = call;
-            this.callCost = callCost;
-        }
-
-        public String date() {
-            return call.date();
-        }
-
-        public String callee() {
-            return call.callee();
-        }
-
-        public String durationMinutes() {
-            return "" + call.durationSeconds() / 60 + ":" + String.format("%02d", call.durationSeconds() % 60);
-        }
-
-        public BigDecimal cost() {
-            return callCost;
-        }
     }
 }

@@ -15,6 +15,7 @@ import com.acmetelecom.customer.CustomerDatabase;
 import com.acmetelecom.customer.Tariff;
 import com.acmetelecom.customer.CentralTariffDatabase;
 import com.acmetelecom.customer.TariffLibrary;
+import com.acmetelecom.util.LineItem;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -99,13 +100,13 @@ public class CucumberSteps {
     	Customer customer = new Customer(name, number, plan);
 
         List<LineItem> actualLines = new ArrayList<LineItem>();
-        List<BillingSystem.LineItem> items = billingSystem.createBillFor(customer).getSnd();
+        List<LineItem> items = billingSystem.createBillFor(customer).getSnd();
 
         System.out.println("called createBillFor");
         System.out.println("size: " + items.size());
 
-        for (BillingSystem.LineItem line: items) {
-            actualLines.add(new LineItem(line));
+        for (LineItem line: items) {
+            actualLines.add(line);
             System.out.println(line.callee() + " " + line.date() + " " + line.durationMinutes() + " " + line.cost());
         }
 
@@ -120,17 +121,4 @@ public class CucumberSteps {
         assertEquals("bill total", expectedTotal, actualTotal);
     }
 
-    public static class LineItem {
-    	public String time;
-    	public String number;
-        public String duration;
-        public BigDecimal cost;
-
-        public LineItem(BillingSystem.LineItem line) {
-            time = line.date();
-            number = line.callee();
-            duration = line.durationMinutes();
-            cost = line.cost();
-        }
-    }
 }
