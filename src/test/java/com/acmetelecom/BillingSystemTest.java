@@ -5,6 +5,7 @@ import com.acmetelecom.customer.CustomerDatabase;
 import com.acmetelecom.customer.Tariff;
 import com.acmetelecom.customer.TariffLibrary;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatcher;
@@ -46,7 +47,7 @@ public class BillingSystemTest {
         verifyLastEvent(john, helen);
     }
 
-    @Test
+    @Ignore @Test
     public void testCreateCustomerBills() throws Exception {
         billingSystem.callInitiated(john, helen);
         billingSystem.callCompleted(john, helen);
