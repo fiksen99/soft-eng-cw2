@@ -38,30 +38,30 @@ public class CucumberSteps {
 
     @Given("the following customer database:")
     public void setUpCustomerDatabaseForTest(DataTable customersTable) {
-    	List<Customer> customers = new ArrayList<Customer>();
+        List<Customer> customers = new ArrayList<Customer>();
 
-    	for (Map<String, String> row : customersTable.asMaps()) {
-        		String phoneNumber = row.get("PhoneNumber");
-        		String pricePlan = row.get("PricePlan");
-        		Customer customer = new Customer(row.get("FullName"), phoneNumber, pricePlan);
-        		customers.add(customer);
+        for (Map<String, String> row : customersTable.asMaps()) {
+                String phoneNumber = row.get("PhoneNumber");
+                String pricePlan = row.get("PricePlan");
+                Customer customer = new Customer(row.get("FullName"), phoneNumber, pricePlan);
+                customers.add(customer);
 
-            	Mockito.when(tariffsDb.tarriffFor(Mockito.argThat(new PlanMatcher(customer)))).thenReturn(Tariff.valueOf(pricePlan));
+                Mockito.when(tariffsDb.tarriffFor(Mockito.argThat(new PlanMatcher(customer)))).thenReturn(Tariff.valueOf(pricePlan));
         }
 
         Mockito.stub(customersDb.getCustomers()).toReturn(customers);
     }
 
     private class PlanMatcher extends ArgumentMatcher<Customer> {
-    	private Customer expectedCustomer;
+        private Customer expectedCustomer;
 
-		public PlanMatcher(Customer expectedCustomer) {
-			this.expectedCustomer = expectedCustomer;
-		}
+        public PlanMatcher(Customer expectedCustomer) {
+            this.expectedCustomer = expectedCustomer;
+        }
 
-    	@Override
-		public boolean matches(Object obj) {
-    		if (expectedCustomer == obj) return true;
+        @Override
+        public boolean matches(Object obj) {
+            if (expectedCustomer == obj) return true;
             if (!(obj instanceof Customer)) return false;
 
             Customer givenCustomer = (Customer) obj;
@@ -71,27 +71,27 @@ public class CucumberSteps {
                     : expectedCustomer.getPricePlan() != null) return false;
 
             return true;  //To change body of implemented methods use File | Settings | File Templates.
-		}
+        }
     }
 
-	@When("^(.+) calls (.+) at \"([^\"]*)\"$")
+    @When("^(.+) calls (.+) at \"([^\"]*)\"$")
     public void startCall(String caller, String callee, String date) {
-		DateTime time = DateTime.parse(date, DateTimeFormat.forPattern("dd/MM/yy HH:mm:ss"));
-    	billingSystem.callInitiated(caller, callee, time.getMillis());
+        DateTime time = DateTime.parse(date, DateTimeFormat.forPattern("dd/MM/yy HH:mm:ss"));
+        billingSystem.callInitiated(caller, callee, time.getMillis());
 
-    	System.out.println("startCall: " + time.dayOfMonth().get() + ", " + time.getHourOfDay());
+        System.out.println("startCall: " + time.dayOfMonth().get() + ", " + time.getHourOfDay());
     }
 
     @And("^(.+) ends call with (.+) at \"(.*)\"$")
     public void endCall(String caller, String callee, String date) {
-    	DateTime time = DateTime.parse(date, DateTimeFormat.forPattern("dd/MM/yy HH:mm:ss"));
+        DateTime time = DateTime.parse(date, DateTimeFormat.forPattern("dd/MM/yy HH:mm:ss"));
         billingSystem.callCompleted(caller, callee, time.getMillis());
     }
 
     @Then("the bill for (.+) with number (.+) and plan (.+) shows:")
     public void createBills(String name, String number, String plan, DataTable expectedLines) {
-    	System.out.println("name " + name + " number " + number + " plan " + plan);
-    	Customer customer = new Customer(name, number, plan);
+        System.out.println("name " + name + " number " + number + " plan " + plan);
+        Customer customer = new Customer(name, number, plan);
 
         List<LineItem> actualLines = new ArrayList<LineItem>();
         List<LineItem> items = billingSystem.createBillFor(customer).getSnd();
@@ -111,8 +111,8 @@ public class CucumberSteps {
     @Then("total (\\d+(?:\\.\\d+)?)")
     public void checkTotal(BigDecimal expectedTotal) {
         expectedTotal = expectedTotal.setScale(0, RoundingMode.HALF_UP);
-    	Customer customer = new Customer("Alan", "001", "Standard");	//TODO
-    	BigDecimal actualTotal = billingSystem.createBillFor(customer).getFst();
+        Customer customer = new Customer("Alan", "001", "Standard");    //TODO
+        BigDecimal actualTotal = billingSystem.createBillFor(customer).getFst();
         assertEquals("bill total", expectedTotal, actualTotal);
     }
 
