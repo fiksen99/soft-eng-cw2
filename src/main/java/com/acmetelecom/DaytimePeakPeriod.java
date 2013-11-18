@@ -28,4 +28,21 @@ class DaytimePeakPeriod {
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         return hour < peakStartHour || hour >= peakEndHour;
     }
+    
+    public int peakPeriodSeconds() {
+    	return Math.abs(peakStartHour - peakEndHour) * 3600;
+    }
+    
+    public int offPeakPeriodSeconds() {
+    	return Math.abs(24 - (peakStartHour - peakEndHour)) * 3600;
+    }
+    
+    public final int getPeakStartHour() {
+    	return peakStartHour;
+    }
+    
+    public final int getPeakEndHour() {
+    	return peakEndHour;
+    }
+    
 }

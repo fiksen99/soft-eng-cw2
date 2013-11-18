@@ -68,18 +68,12 @@ public class BillingSystem {
     	for (Call call : calls) {
 
             Tariff tariff = tariffLib.tarriffFor(customer);
-            BigDecimal callCost;
-            DaytimePeakPeriod peakPeriod = new DaytimePeakPeriod();
-
-            if (peakPeriod.offPeak(call.startTime()) && peakPeriod.offPeak(call.endTime()) && call.durationSeconds() < 12 * 60 * 60) {
-            	callCost = calculateCost(call.durationSeconds(), tariff.offPeakRate());
-            } else {
-            	callCost = calculateCost(call.durationSeconds(), tariff.peakRate());
-            }
-
-            totalBill = totalBill.add(callCost);
+    		BillChargeCalculator cal = new BillChargeCalculator(tariff, call, customer);
+    		BigDecimal callCost = cal.billCharge();
             
-            System.out.println("in BillingSystem.getBill: callee=" + call.callee() + ", date=" + call.date() + ", startTime=" + call.startTime());
+    		totalBill = totalBill.add(callCost);
+            
+    		System.out.println("in BillingSystem.getBill: callee=" + call.callee() + ", date=" + call.date() + ", startTime=" + call.startTime());
             items.add(new LineItem(call, callCost));
         }
 
