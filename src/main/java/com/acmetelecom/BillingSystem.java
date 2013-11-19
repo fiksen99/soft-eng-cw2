@@ -13,7 +13,6 @@ import com.acmetelecom.customer.Customer;
 import com.acmetelecom.customer.CustomerDatabase;
 import com.acmetelecom.customer.Tariff;
 import com.acmetelecom.customer.TariffLibrary;
-import com.acmetelecom.util.Tuple;
 
 public class BillingSystem {
 
@@ -66,7 +65,7 @@ public class BillingSystem {
         return cost.setScale(0, RoundingMode.HALF_UP);
     }
 
-    private Tuple<BigDecimal, List<LineItem>> getBill(Customer customer, List<Call> calls){
+    private Bill getBill(Customer customer, List<Call> calls){
         BigDecimal totalBill = new BigDecimal(0);
         List<LineItem> items = new ArrayList<LineItem>();
 
@@ -81,10 +80,10 @@ public class BillingSystem {
             items.add(new LineItem(call, callCost));
         }
 
-        return new Tuple<BigDecimal, List<LineItem>>(totalBill, items);
+        return new Bill(totalBill, items);
     }
 
-    Tuple<BigDecimal, List<LineItem>> createBillFor(Customer customer) {
+    Bill createBillFor(Customer customer) {
         List<CallEvent> customerEvents = new ArrayList<CallEvent>();
         for (CallEvent callEvent : callLog) {
             if (callEvent.getCaller().equals(customer.getPhoneNumber())) {
@@ -109,8 +108,8 @@ public class BillingSystem {
             }
         }
 
-        Tuple<BigDecimal, List<LineItem>> bill = getBill(customer, calls);
-        this.billGeneratorFact.createBillGenerator().send(customer, bill.getSnd(), MoneyFormatter.penceToPounds(bill.getFst()));
+        Bill bill = getBill(customer, calls);
+        this.billGeneratorFact.createBillGenerator().send(customer, bill.getItems(), MoneyFormatter.penceToPounds(bill.getCost()));
 
         return bill;
     }

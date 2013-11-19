@@ -14,7 +14,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Mockito;
 
-import com.acmetelecom.BillingSystem.LineItem;
+import com.acmetelecom.BillingSystem;
 import com.acmetelecom.customer.Customer;
 import com.acmetelecom.customer.CustomerDatabase;
 import com.acmetelecom.customer.Tariff;
@@ -94,12 +94,12 @@ public class CucumberSteps {
         Customer customer = new Customer(name, number, plan);
 
         List<BillEntry> actualLines = new ArrayList<BillEntry>();
-        List<LineItem> items = billingSystem.createBillFor(customer).getSnd();
+        List<BillingSystem.LineItem> items = billingSystem.createBillFor(customer).getItems();
 
         System.out.println("called createBillFor");
         System.out.println("size: " + items.size());
 
-        for (LineItem line: items) {
+        for (BillingSystem.LineItem line: items) {
             actualLines.add(BillEntry.fromLineItem(line));
             System.out.println(line.callee() + " " + line.date() + " " + line.durationMinutes() + " " + line.cost());
         }
@@ -112,7 +112,7 @@ public class CucumberSteps {
     public void checkTotal(BigDecimal expectedTotal) {
         expectedTotal = expectedTotal.setScale(0, RoundingMode.HALF_UP);
         Customer customer = new Customer("Alan", "001", "Standard");    //TODO
-        BigDecimal actualTotal = billingSystem.createBillFor(customer).getFst();
+        BigDecimal actualTotal = billingSystem.createBillFor(customer).getCost();
         assertEquals("bill total", expectedTotal, actualTotal);
     }
 
