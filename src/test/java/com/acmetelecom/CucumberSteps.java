@@ -14,11 +14,11 @@ import org.joda.time.format.DateTimeFormat;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Mockito;
 
+import com.acmetelecom.BillingSystem.LineItem;
 import com.acmetelecom.customer.Customer;
 import com.acmetelecom.customer.CustomerDatabase;
 import com.acmetelecom.customer.Tariff;
 import com.acmetelecom.customer.TariffLibrary;
-import com.acmetelecom.util.LineItem;
 
 import cucumber.api.DataTable;
 import cucumber.api.java.en.And;

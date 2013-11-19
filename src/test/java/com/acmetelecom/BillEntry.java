@@ -1,7 +1,5 @@
 package com.acmetelecom;
 
-import com.acmetelecom.util.LineItem;
-
 public class BillEntry {
     public final String time;
     public final String number;
@@ -15,7 +13,7 @@ public class BillEntry {
         this.cost = cost;
     }
 
-    public static BillEntry fromLineItem(final LineItem lineItem) {
+    public static BillEntry fromLineItem(final BillingSystem.LineItem lineItem) {
         return new BillEntry(lineItem.date(), lineItem.callee(), lineItem.durationMinutes(), lineItem.cost().toString());
     }
 }

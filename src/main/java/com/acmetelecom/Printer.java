@@ -1,7 +1,6 @@
 package com.acmetelecom;
 
 import com.acmetelecom.customer.Customer;
-import com.acmetelecom.util.LineItem;
 
 import java.util.List;
 
@@ -11,10 +10,10 @@ public interface Printer {
     void printHeader(String name, String phoneNumber, String pricePlan);
 
     void printItem(String time, String callee, String duration, String cost);
-    void printItemTable(List<LineItem> items);
+    void printItemTable(List<BillingSystem.LineItem> items);
 
     void printTotal(String total);
     void printTotalFooter(String total);
 
-    void printBill(Customer customer, List<LineItem> calls, String totalBill);
+    void printBill(Customer customer, List<BillingSystem.LineItem> calls, String totalBill);
 }

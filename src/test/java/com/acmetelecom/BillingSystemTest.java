@@ -25,7 +25,6 @@ import com.acmetelecom.customer.Customer;
 import com.acmetelecom.customer.CustomerDatabase;
 import com.acmetelecom.customer.Tariff;
 import com.acmetelecom.customer.TariffLibrary;
-import com.acmetelecom.util.LineItem;
 
 public class BillingSystemTest {
     private BillingSystem billingSystem;
@@ -37,7 +36,7 @@ public class BillingSystemTest {
     private BillGenerator mockBillGenerator;
 
     @Captor private ArgumentCaptor<Customer> customerCaptor;
-    @Captor private ArgumentCaptor<List<LineItem>> callsCaptor;
+    @Captor private ArgumentCaptor<List<BillingSystem.LineItem>> callsCaptor;
     @Captor private ArgumentCaptor<String> totalBillCaptor;
 
 
@@ -63,7 +62,7 @@ public class BillingSystemTest {
 
         for (int i = 0; i < 2; i++) {
             Customer customer = customerCaptor.getAllValues().get(i);
-            List<LineItem> calls = callsCaptor.getAllValues().get(i);
+            List<BillingSystem.LineItem> calls = callsCaptor.getAllValues().get(i);
             String totalBill = totalBillCaptor.getAllValues().get(i);
 
             assertThat(customer, anyOf(is(new CustomerMatcher(customerJohn)),

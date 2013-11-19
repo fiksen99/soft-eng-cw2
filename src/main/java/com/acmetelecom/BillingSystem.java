@@ -1,14 +1,19 @@
 package com.acmetelecom;
 
-import com.acmetelecom.customer.*;
-import com.acmetelecom.util.LineItem;
-import com.acmetelecom.util.Tuple;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.joda.time.DateTime;
+
+import com.acmetelecom.customer.CentralCustomerDatabase;
+import com.acmetelecom.customer.CentralTariffDatabase;
+import com.acmetelecom.customer.Customer;
+import com.acmetelecom.customer.CustomerDatabase;
+import com.acmetelecom.customer.Tariff;
+import com.acmetelecom.customer.TariffLibrary;
+import com.acmetelecom.util.Tuple;
 
 public class BillingSystem {
 
@@ -108,5 +113,31 @@ public class BillingSystem {
         this.billGeneratorFact.createBillGenerator().send(customer, bill.getSnd(), MoneyFormatter.penceToPounds(bill.getFst()));
 
         return bill;
+    }
+
+    static class LineItem {
+        private Call call;
+        private BigDecimal callCost;
+
+        public LineItem(Call call, BigDecimal callCost) {
+            this.call = call;
+            this.callCost = callCost;
+        }
+
+        public String date() {
+            return call.date();
+        }
+
+        public String callee() {
+            return call.callee();
+        }
+
+        public String durationMinutes() {
+            return "" + call.durationSeconds() / 60 + ":" + String.format("%02d", call.durationSeconds() % 60);
+        }
+
+        public BigDecimal cost() {
+            return callCost;
+        }
     }
 }

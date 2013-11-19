@@ -1,9 +1,8 @@
 package com.acmetelecom;
 
-import com.acmetelecom.customer.Customer;
-import com.acmetelecom.util.LineItem;
-
 import java.util.List;
+
+import com.acmetelecom.customer.Customer;
 
 public class BillGenerator {
 
@@ -20,7 +19,7 @@ public class BillGenerator {
 
     }
 
-    public void send(Customer customer, List<LineItem> calls, String totalBill) {
+    public void send(Customer customer, List<BillingSystem.LineItem> calls, String totalBill) {
         HtmlPrinter.getInstance().printBill(customer, calls, totalBill);
     }
 }
