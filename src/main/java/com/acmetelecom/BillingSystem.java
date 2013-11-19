@@ -57,31 +57,30 @@ public class BillingSystem {
     }
 
     private BigDecimal calculateCost(long durationSeconds, BigDecimal rate) {
-    	BigDecimal cost = new BigDecimal(durationSeconds).multiply(rate);
-    	return cost.setScale(0, RoundingMode.HALF_UP);
-    }	
-    
+        BigDecimal cost = new BigDecimal(durationSeconds).multiply(rate);
+        return cost.setScale(0, RoundingMode.HALF_UP);
+    }
+
     private Tuple<BigDecimal, List<LineItem>> getBill(Customer customer, List<Call> calls){
-    	BigDecimal totalBill = new BigDecimal(0);
-    	List<LineItem> items = new ArrayList<LineItem>();
+        BigDecimal totalBill = new BigDecimal(0);
+        List<LineItem> items = new ArrayList<LineItem>();
 
-    	for (Call call : calls) {
-
+        for (Call call : calls) {
             Tariff tariff = tariffLib.tarriffFor(customer);
-    		BillChargeCalculator cal = new BillChargeCalculator(tariff, call, customer);
-    		BigDecimal callCost = cal.billCharge();
-            
-    		totalBill = totalBill.add(callCost);
-            
-    		System.out.println("in BillingSystem.getBill: callee=" + call.callee() + ", date=" + call.date() + ", startTime=" + call.startTime());
+            BillChargeCalculator cal = new BillChargeCalculator(tariff, call, customer);
+            BigDecimal callCost = cal.billCharge();
+
+            totalBill = totalBill.add(callCost);
+
+            System.out.println("in BillingSystem.getBill: callee=" + call.callee() + ", date=" + call.date() + ", startTime=" + call.startTime());
             items.add(new LineItem(call, callCost));
         }
 
-    	return new Tuple<BigDecimal, List<LineItem>>(totalBill, items);
+        return new Tuple<BigDecimal, List<LineItem>>(totalBill, items);
     }
 
     Tuple<BigDecimal, List<LineItem>> createBillFor(Customer customer) {
-    	List<CallEvent> customerEvents = new ArrayList<CallEvent>();
+        List<CallEvent> customerEvents = new ArrayList<CallEvent>();
         for (CallEvent callEvent : callLog) {
             if (callEvent.getCaller().equals(customer.getPhoneNumber())) {
                 customerEvents.add(callEvent);
@@ -93,19 +92,19 @@ public class BillingSystem {
 
         for (CallEvent event : customerEvents) {
             if (event instanceof CallStart) {
-            	System.out.println("Timestamp in BillingSystem.createBillFor: " + event.time());
-            	System.out.println("Event started at " + new DateTime(event.time()).toString("dd/MM/yyyy HH:mm:ss"));
+                System.out.println("Timestamp in BillingSystem.createBillFor: " + event.time());
+                System.out.println("Event started at " + new DateTime(event.time()).toString("dd/MM/yyyy HH:mm:ss"));
                 start = event;
             }
             if (event instanceof CallEnd && start != null) {
-            	System.out.println("Event ended at " + new DateTime(event.time()).toString("dd/MM/yyyy HH:mm:ss"));
+                System.out.println("Event ended at " + new DateTime(event.time()).toString("dd/MM/yyyy HH:mm:ss"));
 
                 calls.add(new Call(start, event));
                 start = null;
             }
         }
 
-    	Tuple<BigDecimal, List<LineItem>> bill = getBill(customer, calls);
+        Tuple<BigDecimal, List<LineItem>> bill = getBill(customer, calls);
         this.billGeneratorFact.createBillGenerator().send(customer, bill.getSnd(), MoneyFormatter.penceToPounds(bill.getFst()));
 
         return bill;

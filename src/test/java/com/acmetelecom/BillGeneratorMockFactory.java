@@ -14,7 +14,7 @@ public class BillGeneratorMockFactory extends BillGeneratorFactory {
     }
 
     @Override
-	public BillGenerator createBillGenerator() {
-		return Mockito.mock(BillGenerator.class);
-	}
+    public BillGenerator createBillGenerator() {
+        return Mockito.mock(BillGenerator.class);
+    }
 }
