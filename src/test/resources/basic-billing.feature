@@ -21,7 +21,7 @@ Scenario: Peak-Peak
 
     Then the bill for Alan with number 001 and plan Standard shows:
         |     Time        | Number      | Duration  |   Cost    |
-        |25/10/13 15:00   | 002         | 194:00    | 5,820     |
+        |25/10/13 15:00   | 002         | 194:00    | 5820      |
     And total 5820
 
 Scenario: Peak-Offpeak
@@ -30,7 +30,7 @@ Scenario: Peak-Offpeak
 
     Then the bill for Alan with number 001 and plan Standard shows:
         |     Time        | Number      | Duration  |   Cost    |
-        |25/10/13 15:00   | 002         | 254:00    | 7,620     |
+        |25/10/13 15:00   | 002         | 254:00    | 7620      |
     And total 7620
 
 Scenario: Offpeak-Peak
@@ -39,7 +39,7 @@ Scenario: Offpeak-Peak
 
     Then the bill for Alan with number 001 and plan Standard shows:
         |     Time        | Number      | Duration  |   Cost    |
-        |25/10/13 05:00   | 002         | 254:00    | 7,620     |
+        |25/10/13 05:00   | 002         | 254:00    | 7620      |
     And total 7620
 
 Scenario: Peak-Offpeak-Peak
