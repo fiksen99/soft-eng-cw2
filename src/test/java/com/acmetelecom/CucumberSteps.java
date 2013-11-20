@@ -6,7 +6,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import org.joda.time.DateTime;
@@ -28,12 +27,7 @@ import cucumber.api.java.en.When;
 public class CucumberSteps {
     private final CustomerDatabase customersDb = Mockito.mock(CustomerDatabase.class);
     private final TariffLibrary tariffsDb = Mockito.mock(TariffLibrary.class);
-    private final int peakStartHour = 7;
-    private final int peakEndHour = 19;
-    private final DaytimePeakPeriod period = new DaytimePeakPeriod(peakStartHour, peakEndHour);
     private final BillingSystem billingSystem = new BillingSystem(customersDb, tariffsDb, new BillGeneratorMockFactory());
-
-    private static final Locale LOCALE = Locale.UK;
 
     @Given("the following customer database:")
     public void setUpCustomerDatabaseForTest(DataTable customersTable) {
