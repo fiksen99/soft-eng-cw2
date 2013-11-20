@@ -66,26 +66,29 @@ project with this dependency. In a industrial environment, we would likely set
 up a shared repository across the company where this jar file would be stored
 and accessible by anyone, allowing us to remove it from our project.
 
+\begin{figure}[h]
 \begin{verbatim}  
+<repositories>
+  <repository>
+    <id>in-project</id>
+    <name>Custom JARs</name>
+    <url>file://${project.basedir}/lib</url>
+    <releases><enabled>true</enabled><updatePolicy>always</updatePolicy></releases>
+    <snapshots><enabled>true</enabled><updatePolicy>always</updatePolicy></snapshots>
+  </repository>
+</repositories>
+
 <dependencies>
-<dependency>
-  <groupId>com.acmetelecom</groupId>
-  <artifactId>external</artifactId>
-  <version>1.0.0</version>
-</dependency>
-...
-<dependency>
-  <groupId>info.cukes</groupId>
-  <artifactId>cucumber-core</artifactId>
-  <version>1.1.4</version>
-  <scope>runtime</scope>
-</dependency>
+  <dependency>
+    <groupId>com.acmetelecom</groupId>
+    <artifactId>external</artifactId>
+    <version>1.0.0</version>
+  </dependency>
 ...
 </dependencies>
-
 \end{verbatim}
-Specifying project dependencies via the pom.xml
-
+\caption{Specifying project dependencies via the pom.xml}
+\end{figure}
 A feature of maven is the dependency plugin. This allows testing of our pom file
 (which we initially set up to depend on all jars found in the initial lib folder)
 to ensure there are no unnecessary or missing dependencies. Running the
