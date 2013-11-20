@@ -1,4 +1,5 @@
 \documentclass[a4paper]{article}
+\usepackage{graphicx}
 
 \begin{document}
 
@@ -35,7 +36,11 @@ code -- reducing coupling and increasing cohesion being a great area of focus on
 this point. As in the last coursework, we utilised developer tool \emph{stan4j} as
 well as IntelliJ's dependency analyser.
 
-\emph{insert graph here} the dependency graph as indicated by stan4j
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{dependency_graph}
+\caption{The dependency graph as indicated by stan4j}
+\end{figure}
 
 We observed a circular dependency bewteen BillingSystem and BillingGenerator which
 could potentially cause issues if we were to replace one of these classes. Our
@@ -60,6 +65,26 @@ the project and pointed to it within our pom file, allowing maven to build our
 project with this dependency. In a industrial environment, we would likely set
 up a shared repository across the company where this jar file would be stored
 and accessible by anyone, allowing us to remove it from our project.
+
+\begin{verbatim}  
+<dependencies>
+<dependency>
+  <groupId>com.acmetelecom</groupId>
+  <artifactId>external</artifactId>
+  <version>1.0.0</version>
+</dependency>
+...
+<dependency>
+  <groupId>info.cukes</groupId>
+  <artifactId>cucumber-core</artifactId>
+  <version>1.1.4</version>
+  <scope>runtime</scope>
+</dependency>
+...
+</dependencies>
+
+\end{verbatim}
+Specifying project dependencies via the pom.xml
 
 A feature of maven is the dependency plugin. This allows testing of our pom file
 (which we initially set up to depend on all jars found in the initial lib folder)
