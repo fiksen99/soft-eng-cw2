@@ -42,11 +42,10 @@ well as IntelliJ's dependency analyser.
 \caption{The dependency graph as indicated by stan4j}
 \end{figure}
 
-We observed a circular dependency bewteen BillingSystem and BillingGenerator which
+We observed a circular dependency between BillingSystem and BillingGenerator which
 could potentially cause issues if we were to replace one of these classes. Our
 first move was to remove this dependency by moving LineItem, which is a static inner class
-of BillingSystem, into it's own class. Ultimately we decided against this approach
-for reasons unknown to this author. :)
+of BillingSystem, into it's own class. 
 
 
 \subsection{Maven}
