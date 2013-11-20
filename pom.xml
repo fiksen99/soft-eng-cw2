@@ -97,30 +97,6 @@
       <scope>run-time</scope>
     </dependency>
     <dependency>
-      <groupId>info.cukes</groupId>
-      <artifactId>cucumber-jvm-deps</artifactId>
-      <version>1.0.3</version>
-      <scope>run-time</scope>
-    </dependency>
-    <dependency>
-      <groupId>info.cukes</groupId>
-      <artifactId>cucumber-html</artifactId>
-      <version>0.2.3</version>
-      <scope>run-time</scope>
-    </dependency>
-    <dependency>
-      <groupId>info.cukes</groupId>
-      <artifactId>gherkin</artifactId>
-      <version>2.12.1</version>
-      <scope>run-time</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.rubiconproject.oss</groupId>
-      <artifactId>jchronic</artifactId>
-      <version>0.2.6</version>
-      <scope>run-time</scope>
-    </dependency>
-    <dependency>
         <groupId>joda-time</groupId>
         <artifactId>joda-time</artifactId>
         <version>2.3</version>
