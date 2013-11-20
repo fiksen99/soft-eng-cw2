@@ -12,9 +12,9 @@ import java.util.List;
  */
 class Bill {
     private final BigDecimal cost;
-    private final List<BillingSystem.LineItem> items;
+    private final List<LineItem> items;
 
-    public Bill(BigDecimal cost, List<BillingSystem.LineItem> items) {
+    public Bill(BigDecimal cost, List<LineItem> items) {
         this.cost = cost;
         this.items = items;
     }
@@ -23,7 +23,7 @@ class Bill {
         return cost;
     }
 
-    public List<BillingSystem.LineItem> getItems() {
+    public List<LineItem> getItems() {
         return items;
     }
 

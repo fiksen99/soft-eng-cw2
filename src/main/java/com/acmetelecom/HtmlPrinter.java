@@ -47,9 +47,9 @@ class HtmlPrinter implements Printer {
     /**
      * Outputs HTML table of all the LineItems in the list
      */
-    public void printItemTable(List<BillingSystem.LineItem> items) {
+    public void printItemTable(List<LineItem> items) {
         beginTable();
-        for (BillingSystem.LineItem item : items) {
+        for (LineItem item : items) {
             printItem(item.date(), item.callee(), item.durationMinutes(), MoneyFormatter.penceToPounds(item.cost()));
         }
         endTable();
@@ -90,7 +90,7 @@ class HtmlPrinter implements Printer {
     /**
      * Prints the whole bill as HTML to System.out
      */
-    public void printBill(Customer customer, List<BillingSystem.LineItem> calls, String totalBill) {
+    public void printBill(Customer customer, List<LineItem> calls, String totalBill) {
         beginHtml();
         printHeader(customer.getFullName(), customer.getPhoneNumber(), customer.getPricePlan());
         printItemTable(calls);
