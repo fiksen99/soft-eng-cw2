@@ -19,7 +19,7 @@ public class BillGenerator {
 
     }
 
-    public void send(Customer customer, List<LineItem> calls, String totalBill) {
+    public void send(Customer customer, List<BillingSystem.LineItem> calls, String totalBill) {
         HtmlPrinter.getInstance().printBill(customer, calls, totalBill);
     }
 }

@@ -87,12 +87,12 @@ public class CucumberSteps {
         Customer customer = new Customer(name, number, plan);
 
         List<BillEntry> actualLines = new ArrayList<BillEntry>();
-        List<LineItem> items = billingSystem.createBillFor(customer).getItems();
+        List<BillingSystem.LineItem> items = billingSystem.createBillFor(customer).getItems();
 
         System.out.println("called createBillFor");
         System.out.println("size: " + items.size());
 
-        for (LineItem line: items) {
+        for (BillingSystem.LineItem line: items) {
             actualLines.add(BillEntry.fromLineItem(line));
             System.out.println(line.callee() + " " + line.date() + " " + line.durationMinutes() + " " + line.cost());
         }

@@ -13,7 +13,7 @@ public class BillEntry {
         this.cost = cost;
     }
 
-    public static BillEntry fromLineItem(final LineItem lineItem) {
+    public static BillEntry fromLineItem(final BillingSystem.LineItem lineItem) {
         return new BillEntry(lineItem.date(), lineItem.callee(), lineItem.durationMinutes(), lineItem.cost().toString());
     }
 }
