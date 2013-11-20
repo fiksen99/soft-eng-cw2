@@ -30,10 +30,10 @@ public class BillGeneratorTest {
         // Set up dummy parameters:
         Customer customer = new Customer("John Smith", "1234", "expensivePlan");
         String totalBill = "totalBill";
-        List<LineItem> items = new LinkedList<LineItem>();
+        List<BillingSystem.LineItem> items = new LinkedList<BillingSystem.LineItem>();
 
         // Populate items:
-        items.add(new LineItem(
+        items.add(new BillingSystem.LineItem(
                     new Call(
                             new CallStart(john, helen),
                             new CallEnd(john, helen)
@@ -41,7 +41,7 @@ public class BillGeneratorTest {
                     new BigDecimal(100)
                    ));
 
-        items.add(new LineItem(
+        items.add(new BillingSystem.LineItem(
                 new Call(
                         new CallStart(helen, john),
                         new CallEnd(helen, john)
