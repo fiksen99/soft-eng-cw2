@@ -1,14 +1,18 @@
 package com.acmetelecom;
 
-import com.acmetelecom.customer.*;
-import com.acmetelecom.util.LineItem;
-import com.acmetelecom.util.Tuple;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.joda.time.DateTime;
+
+import com.acmetelecom.customer.CentralCustomerDatabase;
+import com.acmetelecom.customer.CentralTariffDatabase;
+import com.acmetelecom.customer.Customer;
+import com.acmetelecom.customer.CustomerDatabase;
+import com.acmetelecom.customer.Tariff;
+import com.acmetelecom.customer.TariffLibrary;
 
 public class BillingSystem {
 
@@ -57,37 +61,30 @@ public class BillingSystem {
     }
 
     private BigDecimal calculateCost(long durationSeconds, BigDecimal rate) {
-    	BigDecimal cost = new BigDecimal(durationSeconds).multiply(rate);
-    	return cost.setScale(0, RoundingMode.HALF_UP);
-    }	
-    
-    private Tuple<BigDecimal, List<LineItem>> getBill(Customer customer, List<Call> calls){
-    	BigDecimal totalBill = new BigDecimal(0);
-    	List<LineItem> items = new ArrayList<LineItem>();
+        BigDecimal cost = new BigDecimal(durationSeconds).multiply(rate);
+        return cost.setScale(0, RoundingMode.HALF_UP);
+    }
 
-    	for (Call call : calls) {
+    private Bill getBill(Customer customer, List<Call> calls){
+        BigDecimal totalBill = new BigDecimal(0);
+        List<LineItem> items = new ArrayList<LineItem>();
 
+        for (Call call : calls) {
             Tariff tariff = tariffLib.tarriffFor(customer);
-            BigDecimal callCost;
-            DaytimePeakPeriod peakPeriod = new DaytimePeakPeriod();
-
-            if (peakPeriod.offPeak(call.startTime()) && peakPeriod.offPeak(call.endTime()) && call.durationSeconds() < 12 * 60 * 60) {
-            	callCost = calculateCost(call.durationSeconds(), tariff.offPeakRate());
-            } else {
-            	callCost = calculateCost(call.durationSeconds(), tariff.peakRate());
-            }
+            BillChargeCalculator cal = new BillChargeCalculator(tariff, call, customer);
+            BigDecimal callCost = cal.billCharge();
 
             totalBill = totalBill.add(callCost);
-            
+
             System.out.println("in BillingSystem.getBill: callee=" + call.callee() + ", date=" + call.date() + ", startTime=" + call.startTime());
             items.add(new LineItem(call, callCost));
         }
 
-    	return new Tuple<BigDecimal, List<LineItem>>(totalBill, items);
+        return new Bill(totalBill, items);
     }
 
-    Tuple<BigDecimal, List<LineItem>> createBillFor(Customer customer) {
-    	List<CallEvent> customerEvents = new ArrayList<CallEvent>();
+    Bill createBillFor(Customer customer) {
+        List<CallEvent> customerEvents = new ArrayList<CallEvent>();
         for (CallEvent callEvent : callLog) {
             if (callEvent.getCaller().equals(customer.getPhoneNumber())) {
                 customerEvents.add(callEvent);
@@ -99,21 +96,47 @@ public class BillingSystem {
 
         for (CallEvent event : customerEvents) {
             if (event instanceof CallStart) {
-            	System.out.println("Timestamp in BillingSystem.createBillFor: " + event.time());
-            	System.out.println("Event started at " + new DateTime(event.time()).toString("dd/MM/yyyy HH:mm:ss"));
+                System.out.println("Timestamp in BillingSystem.createBillFor: " + event.time());
+                System.out.println("Event started at " + new DateTime(event.time()).toString("dd/MM/yyyy HH:mm:ss"));
                 start = event;
             }
             if (event instanceof CallEnd && start != null) {
-            	System.out.println("Event ended at " + new DateTime(event.time()).toString("dd/MM/yyyy HH:mm:ss"));
+                System.out.println("Event ended at " + new DateTime(event.time()).toString("dd/MM/yyyy HH:mm:ss"));
 
                 calls.add(new Call(start, event));
                 start = null;
             }
         }
 
-    	Tuple<BigDecimal, List<LineItem>> bill = getBill(customer, calls);
-        this.billGeneratorFact.createBillGenerator().send(customer, bill.getSnd(), MoneyFormatter.penceToPounds(bill.getFst()));
+        Bill bill = getBill(customer, calls);
+        this.billGeneratorFact.createBillGenerator().send(customer, bill.getItems(), MoneyFormatter.penceToPounds(bill.getCost()));
 
         return bill;
+    }
+
+    static class LineItem {
+        private Call call;
+        private BigDecimal callCost;
+
+        public LineItem(Call call, BigDecimal callCost) {
+            this.call = call;
+            this.callCost = callCost;
+        }
+
+        public String date() {
+            return call.date();
+        }
+
+        public String callee() {
+            return call.callee();
+        }
+
+        public String durationMinutes() {
+            return "" + call.durationSeconds() / 60 + ":" + String.format("%02d", call.durationSeconds() % 60);
+        }
+
+        public BigDecimal cost() {
+            return callCost;
+        }
     }
 }

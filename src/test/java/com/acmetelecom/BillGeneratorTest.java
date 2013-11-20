@@ -1,12 +1,6 @@
 package com.acmetelecom;
 
-import com.acmetelecom.customer.Customer;
-import com.acmetelecom.util.LineItem;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.w3c.tidy.Tidy;
+import static org.junit.Assert.assertEquals;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -16,7 +10,12 @@ import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.w3c.tidy.Tidy;
+
+import com.acmetelecom.customer.Customer;
 
 public class BillGeneratorTest {
     private ByteArrayOutputStream tempOut;
@@ -31,10 +30,10 @@ public class BillGeneratorTest {
         // Set up dummy parameters:
         Customer customer = new Customer("John Smith", "1234", "expensivePlan");
         String totalBill = "totalBill";
-        List<LineItem> items = new LinkedList<LineItem>();
+        List<BillingSystem.LineItem> items = new LinkedList<BillingSystem.LineItem>();
 
         // Populate items:
-        items.add(new LineItem(
+        items.add(new BillingSystem.LineItem(
                     new Call(
                             new CallStart(john, helen),
                             new CallEnd(john, helen)
@@ -42,7 +41,7 @@ public class BillGeneratorTest {
                     new BigDecimal(100)
                    ));
 
-        items.add(new LineItem(
+        items.add(new BillingSystem.LineItem(
                 new Call(
                         new CallStart(helen, john),
                         new CallEnd(helen, john)
