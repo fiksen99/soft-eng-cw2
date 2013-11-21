@@ -1,7 +1,6 @@
 package com.acmetelecom;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,15 +53,6 @@ public class BillingSystem {
             createBillFor(customer);
         }
         callLog.clear();
-    }
-
-    CallEvent lastCallEvent() {
-        return callLog.get(callLog.size()-1).copy();
-    }
-
-    private BigDecimal calculateCost(long durationSeconds, BigDecimal rate) {
-        BigDecimal cost = new BigDecimal(durationSeconds).multiply(rate);
-        return cost.setScale(0, RoundingMode.HALF_UP);
     }
 
     private Bill getBill(Customer customer, List<Call> calls){
