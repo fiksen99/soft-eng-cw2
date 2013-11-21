@@ -2,7 +2,7 @@ package com.acmetelecom;
 
 import org.mockito.Mockito;
 
-public class BillGeneratorMockFactory extends BillGeneratorFactory {
+public class BillGeneratorMockFactory implements BillGeneratorFactory {
 
     // make the factory a singleton
     private static BillGeneratorMockFactory factory;

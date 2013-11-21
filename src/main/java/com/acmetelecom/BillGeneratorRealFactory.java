@@ -1,6 +1,6 @@
 package com.acmetelecom;
 
-public class BillGeneratorRealFactory extends BillGeneratorFactory {
+public class BillGeneratorRealFactory implements BillGeneratorFactory {
 
     // make the factory a singleton
     private static BillGeneratorRealFactory factory;
