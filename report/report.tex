@@ -4,12 +4,14 @@
 \begin{document}
 
 \section{Introduction}
-The code for the billing system we were given to change is legacy code. The design hinted that the billing system was a core part of the Acme system, as the codebase is located in the com.acmetelecom package. In the worst case, the lack of package structure for this component suggests a flat hierarchy in the system, with all components having access to all public and package private class of the system. Because of this, we assume that all public and package private classes and methods constitute the API of the billing system, and should therefore keep their signature for compatibility.
+The billing system codebase is a core component of Acme Telecom's business, and is heavily relied upon by other sections of the code. In the absence of unit and acceptance tests, modifying the codebase becomes a delicate matter, as any modifications may silently break existing functionality. For this reason, we started by building unit and acceptance tests for the existing code, to allow us to validate our work. In some situations, this required the refactoring sections of the code or introduce new technologies to the codebase. \emph{Overall, we have been successful in implementing the necessary extensions, while preserving the APIs and functionality of the original system?}
 
-To ensure that our changes did not modify the signature and behaviour of the public and package private classes, we started by building unit tests for the existing code. The unit tests were designed to clearly specify the observed behaviour of the system and fail to compile in case of an API change. Following TDD, we also built unit tests for the expected behaviour and implemented the extension to make the tests pass. Once all the individual components were specified, we wrote acceptance tests to verify the end-to-end behaviour of the system.
+\subsection{System Design and Division of the Tasks}
+For the task we were given access to only part of the code in the com.acmetelecom package. Although it is unclear how much of the code we had not been given access, the lack of a more refined package structure suggests a flat hierarchy in the system, whereby all components have access to all public and package private classes and methods in the system. As such, Throughout the task, we kept the name and signature of such classes and methods for compatibility.
 
+Following our initial analysis of the system as a whole, we decided to start by writing unit tests to validate our changes. Writing these tests was divided up among team members, and we therefore chose to move the codebase to a Git repository for revision control. Following the introduction of several new tools to the system, we additionally added Maven to our project for better control over dependencies.
 
-\section{Unit tests and existing code refactoring}
+\section{Unit Testing}
 As there were no unit tests for the given code and we wanted to ensure that our final implementation is of a high quality, we wrote unit tests for the existing behaviour. We also followed the {\bf Test Driven Development} techniques and added unit tests for the desired new behaviour and then made them pass by implementing the new features.
 
 While writing unit tests for the existing behaviour we found that some of the existing code is worth refactoring. The following paragraphs describe what cases we have covered with our unit tests and the most important changes we have introduced in each class. While refactoring we ensured that no public APIs are changed so that no components from other departments depending on our billing system could be broken.
@@ -247,5 +249,15 @@ All approaches taken in completing the current project are pivotal in the manage
 
 On a different note, we learned to use new tools such as Cucumber.
 
+
+\section{rough}
+
+\subsection{guiding principle for the essay}
+
+Our extensions and modifications to the legacy billing codebase of AcmeTelecom are good, and make the code better than it was before, bitches.
+
+\subsection{Aga's text}
+
+To ensure that our changes did not modify the signature and behaviour of the public and package private classes, we started by building unit tests for the existing code. The unit tests were designed to clearly specify the observed behaviour of the system and fail to compile in case of an API change. Following TDD, we also built unit tests for the expected behaviour and implemented the extension to make the tests pass. Once all the individual components were specified, we wrote acceptance tests to verify the end-to-end behaviour of the system.
 
 \end{document}
